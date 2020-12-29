@@ -1,6 +1,6 @@
 
 /* 
- *  Version: 0-4-0
+ *  Version: 0-4-1
  *  Arduino IDE V1.8.13
  *  Board: Adafruit Feather 32u4 Adalogger https://learn.adafruit.com/adafruit-feather-32u4-adalogger
  *  Sensor: TSL2561 Luminosity Sensor https://learn.adafruit.com/tsl2561
@@ -91,8 +91,7 @@ void error(uint8_t errno){
     sensor API sensor_t type (see Adafruit_Sensor for more information)
 */
 /**************************************************************************/
-void displaySensorDetails(void)
-{
+void displaySensorDetails(void) {
   sensor_t sensor;
   tsl.getSensor(&sensor);
   Serial.println("------------------------------------");
@@ -112,8 +111,7 @@ void displaySensorDetails(void)
     Configures the gain and integration time for the TSL2561
 */
 /**************************************************************************/
-void configureSensor(void)
-{
+void configureSensor(void) {
   /* You can also manually set the gain or enable auto-gain support */
   // tsl.setGain(TSL2561_GAIN_1X);      /* No gain ... use in bright light to avoid sensor saturation */
   // tsl.setGain(TSL2561_GAIN_16X);     /* 16x gain ... use in low light to boost sensitivity */
@@ -136,7 +134,7 @@ void configureSensor(void)
     printDirectory function
 */
 /**************************************************************************/
-void printDirectory(File dir, int numTabs){
+void printDirectory(File dir, int numTabs) {
   while (true) {
     File entry =  dir.openNextFile();
     if (! entry){
@@ -151,7 +149,7 @@ void printDirectory(File dir, int numTabs){
       Serial.println("/");
       printDirectory(entry, numTabs + 1);
     }
-    else{
+    else {
       // files have sizes, directories do not
       Serial.print("\t\t");
       Serial.println(entry.size(), DEC);
@@ -167,7 +165,7 @@ void printDirectory(File dir, int numTabs){
 /**************************************************************************/
 void sd_init() {
   Serial.println("Card initialization"); Serial.println("");
-  if (!SD.begin(cardSelect)){
+  if (!SD.begin(cardSelect)) {
     Serial.println("Card initialization failed!");
     error(2);
   }
@@ -190,7 +188,7 @@ void setup() {
 
 // Destroy all existing files LUXDAT(xy).TXT (stored on SD-Card); only possible when connected to a terminal
   val = digitalRead(intDIP_SW1);
-  if (val == HIGH){
+  if (val == HIGH) {
     Serial.begin(9600);
     while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -217,7 +215,7 @@ void setup() {
 
   // Reading SD-Card directory
   val = digitalRead(intDIP_SW2);
-  if (val == HIGH){
+  if (val == HIGH) {
     Serial.begin(9600);
     while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -232,7 +230,7 @@ void setup() {
 
 // Reading all content of existing files LUXDAT(xy).TXT (storing via terminal program to an ASCII file)
   val = digitalRead(intDIP_SW3);
-  if (val == HIGH){
+  if (val == HIGH) {
     Serial.begin(9600);
     while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -241,13 +239,13 @@ void setup() {
     // create filename, supposing file exist on SD-Card
     char filename[15];
     strcpy(filename, "/LUXDAT00.TXT");
-    for (uint8_t i = 0; i < 100; i++){ 
+    for (uint8_t i = 0; i < 100; i++) { 
       filename[7] = '0' + i/10;
       filename[8] = '0' + i%10;
       if (SD.exists(filename)){
         File dataFile = SD.open(filename);
         // if the file is available, open and write to serial
-        if (dataFile){
+        if (dataFile) {
           Serial.print("Reading data from: "); Serial.println(filename);
           while (dataFile.available()) {
           Serial.write(dataFile.read());
@@ -330,7 +328,7 @@ void loop() {
       and no reliable data could be generated! */
       Serial.println("Sensor overload");
       digitalWrite(sdLED, HIGH);
-      logfile.println("Sensor overload"); logfile.print(";"); logfile.println("lux"); logfile.flush(); // storing message and unit divided by delimiter
+      logfile.print("Sensor overload"); logfile.print(";"); logfile.println("lux"); logfile.flush(); // storing message and unit divided by delimiter
       digitalWrite(sdLED, LOW);
     }
   }
