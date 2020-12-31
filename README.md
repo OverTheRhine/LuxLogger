@@ -9,6 +9,7 @@ Functionality:
 - Read all data from all text files from SD card and send it via USB serial to a terminal program.
 - Read directory from SD card and send it via USB serial to a terminal program.
 - Delete all stored text files on SD card.
+- Blink some error codes with the internal LED.
 
 Used this hardware:
 - https://www.adafruit.com/product/439
