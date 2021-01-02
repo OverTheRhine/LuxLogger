@@ -52,6 +52,7 @@
 #define cardSelect 4
 #define sdLED 8       // Internal LED #8 (
 #define intLED 13     // Internal LED #13 (red)
+// Each port for DIP switch connected to GND via 10k pull-down resistor
 #define intDIP_SW4 12 // DIP-Switch #4
 #define intDIP_SW3 11 // DIP-Switch #3
 #define intDIP_SW2 10 // DIP-Switch #2
