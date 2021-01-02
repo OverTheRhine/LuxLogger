@@ -1,13 +1,13 @@
 
 /* 
- *  Version: 0-4-1
+ *  Version: 0-4-2
  *  Arduino IDE V1.8.13
  *  Board: Adafruit Feather 32u4 Adalogger https://learn.adafruit.com/adafruit-feather-32u4-adalogger
  *  Sensor: TSL2561 Luminosity Sensor https://learn.adafruit.com/tsl2561
  *  Created:  14.12.2020
- *  Modified: 29.12.2020
- *  Tested:   29.12.2020   
- *  Resources used: 22190 Bytes (77%) of Program Memory. Maximum are 28672 Bytes.
+ *  Modified: 02.01.2021
+ *  Tested:   02.01.2021
+ *  Resources used: 22324 Bytes (77%) of Program Memory. Maximum are 28672 Bytes.
  *  Courtesy: Adafruit https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino 
  *  and https://learn.adafruit.com/adafruit-feather-32u4-adalogger/using-the-sd-card?embeds=allow
  *  This driver uses the Adafruit unified sensor library (Adafruit_Sensor),
@@ -102,8 +102,8 @@ void displaySensorDetails(void) {
   Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" lux");
   Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" lux");  
   Serial.println("------------------------------------");
-  Serial.println("");
-  delay(500);
+  Serial.println();
+  delay(200);
 }
 
 /**************************************************************************/
@@ -127,6 +127,8 @@ void configureSensor(void) {
   Serial.print  ("Gain:         "); Serial.println("Auto");
   Serial.print  ("Timing:       "); Serial.println("13 ms");
   Serial.println("------------------------------------");
+  Serial.println();
+  delay(200);
 }
 
 /**************************************************************************/
@@ -160,16 +162,18 @@ void printDirectory(File dir, int numTabs) {
 
 /**************************************************************************/
 /*
-    SD-Card init fuction (called during setup()
+    SD-Card init function (called during setup()
 */
 /**************************************************************************/
 void sd_init() {
-  Serial.println("Card initialization"); Serial.println("");
+  Serial.println();
+  Serial.println("Card initialization started...");
   if (!SD.begin(cardSelect)) {
     Serial.println("Card initialization failed!");
     error(2);
   }
-  Serial.println("Card initialization done.");
+  Serial.println("Card initialization done!");
+  Serial.println();
 }
 
 /**************************************************************************/
@@ -220,12 +224,15 @@ void setup() {
     while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
     }
-    Serial.println("Card initialization"); Serial.println("");
+    Serial.println("------------------------------------");
+    Serial.println("Listing SD card directory...");
     sd_init();
     File root;
     root = SD.open("/");
     printDirectory(root, 0);
-    Serial.println("done!");
+    Serial.println("Listing directory done!");
+    Serial.println("------------------------------------");
+    Serial.println();
   }
 
 // Reading all content of existing files LUXDAT(xy).TXT (storing via terminal program to an ASCII file)
@@ -246,23 +253,23 @@ void setup() {
         File dataFile = SD.open(filename);
         // if the file is available, open and write to serial
         if (dataFile) {
-          Serial.print("Reading data from: "); Serial.println(filename);
+          Serial.print("Reading data from: "); Serial.println(filename); // Write name of file
           while (dataFile.available()) {
-          Serial.write(dataFile.read());
+            Serial.write(dataFile.read());
           }
         dataFile.close();
         }
         // if the file isn't open, pop up an error:
-        else{
+        else {
         Serial.print("Error opening: "); Serial.println(filename);
         error(4);
         }
       }
     }
   }
-// Create a new logfile  
+// Create a new logfile (default)  
   Serial.begin(9600);
-  //Serial.println("Light Sensor Test"); Serial.println("");
+  //Serial.println("Light Sensor Test"); Serial.println();
   if (!SD.begin(cardSelect)) {
     Serial.println("Card init. failed!");
     error(2);
@@ -280,18 +287,17 @@ void setup() {
 
   logfile = SD.open(filename, FILE_WRITE);
   if(!logfile) {
-    Serial.print("Couldnt create "); 
-    Serial.println(filename);
+    Serial.print("Couldnt create "); Serial.println(filename);
     error(3);
   }
   Serial.print("Writing to "); Serial.println(filename);
   Serial.println("Ready!");
+  Serial.println();
   
   /* Initialise the sensor */
   //use tsl.begin() to default to Wire, 
   //tsl.begin(&Wire2) directs api to use Wire2, etc.
-  if(!tsl.begin())
-  {
+  if(!tsl.begin()) {
     /* There was a problem detecting the TSL2561 ... check your connections */
     Serial.print("Warning, no TSL2561 detected ... Check your wiring or I2C ADDR!");
     while(1);
@@ -301,7 +307,9 @@ void setup() {
   /* Setup the sensor gain and integration time */
   configureSensor();
   /* We're ready to go! */
-  Serial.print("Starting measuring!"); Serial.println("");
+  Serial.println("Starting measuring!");
+  Serial.println();
+  logfile.println("Data;Unit[lux]"); // Write header for data listing
 }
 
 /**************************************************************************/
@@ -312,7 +320,7 @@ void setup() {
 void loop() {
   uint8_t val;
   val = digitalRead(intDIP_SW4);
-  if (val == HIGH){
+  if (val == HIGH) {
     /* Get a new sensor event */ 
     sensors_event_t event;
     tsl.getEvent(&event);
@@ -320,7 +328,7 @@ void loop() {
     if (event.light) {
       Serial.print(event.light); Serial.println(" lux");
       digitalWrite(sdLED, HIGH);
-      logfile.print(event.light); logfile.print(";"); logfile.println("lux"); logfile.flush(); // storing value and unit divided by delimiter
+      logfile.print(event.light); logfile.println(";lux"); logfile.flush(); // storing value and unit divided by delimiter
       digitalWrite(sdLED, LOW);
     }
     else {
