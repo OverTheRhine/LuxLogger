@@ -40,7 +40,7 @@
  *  History
  *  =======
  *  2013/JAN/31  - First version (KTOWN)
- *  2020/DEC/14 Something new from OverTheRhine@backhaus-net.de
+ *  2020/DEC/14 Something new from OTR@backhaus-net.de
 */
 #include <SPI.h>
 #include <SD.h>
