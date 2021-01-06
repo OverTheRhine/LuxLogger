@@ -13,8 +13,8 @@ Functionality:
 - Blink some error codes with the internal LED.
 
 Used this hardware:
-- https://www.adafruit.com/product/439
-- https://www.adafruit.com/product/2795
+* https://www.adafruit.com/product/439
+* https://www.adafruit.com/product/2795
 
 Used this software:
 - Arduino IDE v1.8.13 https://www.arduino.cc
