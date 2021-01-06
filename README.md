@@ -20,3 +20,6 @@ Simple data logger based on ADAFRUIT FEATHER 32U4 ADALOGGER with luminosity sens
 * Arduino IDE v1.8.13 https://www.arduino.cc
 * https://github.com/adafruit/Adafruit_TSL2561
 * https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino
+
+## Thanks
+I like to thank all the people who contributed most of the code in this project for their cleverness and effort to make things work.
