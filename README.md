@@ -17,6 +17,6 @@ Used this hardware:
 * https://www.adafruit.com/product/2795
 
 Used this software:
-- Arduino IDE v1.8.13 https://www.arduino.cc
-- https://github.com/adafruit/Adafruit_TSL2561
-- https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino
+* Arduino IDE v1.8.13 https://www.arduino.cc
+* https://github.com/adafruit/Adafruit_TSL2561
+* https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino
