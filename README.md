@@ -5,9 +5,10 @@ Tags: TSL2561, FEATHER 32U4 ADALOGGER, Arduino, I2C, SPI, luminosity
 Simple data logger based on ADAFRUIT FEATHER 32U4 ADALOGGER with luminosity sensor TSL2561 on an ADAFRUIT breakout board. Programming language is C++ (Arduino sketch). Four different functions are available by selecting them with the help of a 4 Bit DIP switch. 100 text files with acquired data can be stored on the SD card.
 
 Functionality:
-- Read sensor data and store it as numeric value (lux) on SD card.
-- Read all data from all text files from SD card and send it via USB serial to a terminal program.
-- Read directory from SD card and send it via USB serial to a terminal program.
+- Read luminosity data (lux) from sensor and store it as numeric value on SD card.
+- Read broadband- and IR-data (raw) from sensor and store it as numeric values on SD card.  
+- Read all data from all text files from SD card and send it via USB serial to terminal program.
+- Read directory from SD card and send it via USB serial to terminal program.
 - Delete all stored text files on SD card.
 - Blink some error codes with the internal LED.
 
