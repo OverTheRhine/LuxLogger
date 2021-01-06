@@ -1,13 +1,13 @@
 
 /* 
- *  Version: 0-4-2
+ *  Version: 0-4-3
  *  Arduino IDE V1.8.13
  *  Board: Adafruit Feather 32u4 Adalogger https://learn.adafruit.com/adafruit-feather-32u4-adalogger
  *  Sensor: TSL2561 Luminosity Sensor https://learn.adafruit.com/tsl2561
  *  Created:  14.12.2020
- *  Modified: 02.01.2021
- *  Tested:   02.01.2021
- *  Resources used: 22324 Bytes (77%) of Program Memory. Maximum are 28672 Bytes.
+ *  Modified: 06.01.2021
+ *  Tested:   06.01.2021
+ *  Resources used: 22570 Bytes (78%) of Program Memory. Maximum are 28672 Bytes.
  *  Courtesy: Adafruit https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino 
  *  and https://learn.adafruit.com/adafruit-feather-32u4-adalogger/using-the-sd-card?embeds=allow
  *  This driver uses the Adafruit unified sensor library (Adafruit_Sensor),
@@ -119,14 +119,14 @@ void configureSensor(void) {
   tsl.enableAutoRange(true);            /* Auto-gain ... switches automatically between 1x and 16x */
   
   /* Changing the integration time gives you better sensor resolution (402ms = 16-bit data) */
-  tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);      /* fast but low resolution */
-  // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_101MS);  /* medium resolution and speed   */
+  //tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);      /* fast but low resolution */
+  tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_101MS);  /* medium resolution and speed   */
   // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);  /* 16-bit data but slowest conversions */
 
   /* Update these values depending on what you've set above! */  
   Serial.println("------------------------------------");
   Serial.print  ("Gain:         "); Serial.println("Auto");
-  Serial.print  ("Timing:       "); Serial.println("13 ms");
+  Serial.print  ("Timing:       "); Serial.println("101 ms");
   Serial.println("------------------------------------");
   Serial.println();
   delay(200);
@@ -310,7 +310,7 @@ void setup() {
   /* We're ready to go! */
   Serial.println("Starting measuring!");
   Serial.println();
-  logfile.println("Data;Unit[lux]"); // Write header for data listing
+  logfile.println("Data;lux;Data2;BB;Data3;IR"); // Write header for data listing
 }
 
 /**************************************************************************/
@@ -320,16 +320,24 @@ void setup() {
 /**************************************************************************/
 void loop() {
   uint8_t val;
+  
+  uint16_t broadband = 0;
+  uint16_t infrared = 0; /* Populate broadband and infrared with the latest values */
+  
   val = digitalRead(intDIP_SW4);
   if (val == HIGH) {
     /* Get a new sensor event */ 
     sensors_event_t event;
     tsl.getEvent(&event);
     /* Display the results (light is measured in lux) */
+    tsl.getLuminosity (&broadband, &infrared);
     if (event.light) {
       Serial.print(event.light); Serial.println(" lux");
+      Serial.print(broadband); Serial.println(" BB");
+      Serial.print(infrared); Serial.println(" IR");
       digitalWrite(sdLED, HIGH);
-      logfile.print(event.light); logfile.println(";lux"); logfile.flush(); // storing value and unit divided by delimiter
+      logfile.print(event.light); logfile.print(";lux;"); logfile.print(broadband); logfile.print(";BB;"); logfile.print(infrared); logfile.println(";IR");
+      logfile.flush(); // storing value and unit divided by delimiter
       digitalWrite(sdLED, LOW);
     }
     else {
@@ -348,5 +356,5 @@ void loop() {
     digitalWrite(intLED, LOW);
     //delay(200);
   }
-  delay(59987); // 60.000 ms minus 13 ms integration time lux sensor
+  delay(59899); // 60.000 ms minus 101 ms integration time lux sensor
 }
