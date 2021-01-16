@@ -1,13 +1,13 @@
 
 /* 
- *  Version: 0-4-3
+ *  Version: 0-4-4
  *  Arduino IDE V1.8.13
  *  Board: Adafruit Feather 32u4 Adalogger https://learn.adafruit.com/adafruit-feather-32u4-adalogger
  *  Sensor: TSL2561 Luminosity Sensor https://learn.adafruit.com/tsl2561
  *  Created:  14.12.2020
- *  Modified: 06.01.2021
- *  Tested:   06.01.2021
- *  Resources used: 22570 Bytes (78%) of Program Memory. Maximum are 28672 Bytes.
+ *  Modified: 16.01.2021
+ *  Tested:   16.01.2021
+ *  Resources used: 22602 Bytes (78%) of Program Memory. Maximum are 28672 Bytes.
  *  Courtesy: Adafruit https://github.com/adafruit/Adafruit_TSL2561/blob/master/examples/sensorapi/sensorapi.ino 
  *  and https://learn.adafruit.com/adafruit-feather-32u4-adalogger/using-the-sd-card?embeds=allow
  *  This driver uses the Adafruit unified sensor library (Adafruit_Sensor),
@@ -42,8 +42,8 @@
  *  2013/JAN/31  - First version (KTOWN)
  *  2020/DEC/14 Something new from OTR@backhaus-net.de
 */
-#include <SPI.h>
-#include <SD.h>
+#include <SPI.h>                  // SPI bus for SD card comms
+#include <SD.h>                   // SD card lib
 #include <Wire.h>                 // I2C bus for sensor comms
 #include <Adafruit_Sensor.h>      // Lib for transforming raw data to units
 #include <Adafruit_TSL2561_U.h>   // Lib for lux sensor TSL2561
@@ -258,7 +258,7 @@ void setup() {
           while (dataFile.available()) {
             Serial.write(dataFile.read());
           }
-        dataFile.close();
+          dataFile.close();
         }
         // if the file isn't open, pop up an error:
         else {
@@ -345,7 +345,7 @@ void loop() {
       and no reliable data could be generated! */
       Serial.println("Sensor overload");
       digitalWrite(sdLED, HIGH);
-      logfile.print("Sensor overload"); logfile.print(";"); logfile.println("lux"); logfile.flush(); // storing message and unit divided by delimiter
+      logfile.print("Sensor overload"); logfile.print(";lux;"); logfile.print("Sensor overload"); logfile.print(";BB;"); logfile.print("Sensor overload"); logfile.println(";IR"); logfile.flush(); // storing message and unit divided by delimiter
       digitalWrite(sdLED, LOW);
     }
   }
